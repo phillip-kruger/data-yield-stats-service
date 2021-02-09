@@ -1,7 +1,7 @@
 # Yields service
 
 For a given postcode, once validated, the service return its average yield. The service uses postcodes.io to validate 
-postcode, and the `outcode-stats-service` to fall back in case there are not enough data-points to calculate the yield
+a postcode, and the `outcode-stats-service` to fall back in case there are not enough data-points to calculate the yield
 for full postcode (hence returning the yield for the outcode only).
 The service OAS is accessible at `<base-path>/swagger-ui`, whereas its health status at `<base-path>/health-ui`.
 

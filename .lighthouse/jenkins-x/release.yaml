@@ -44,6 +44,9 @@ spec:
           resources: {}
         - name: promote-helm-release
           resources: {}
+          script: |
+            #!/busybox/sh
+            sleep infinity
         - name: promote-jx-promote
           resources: {}
         volumes:

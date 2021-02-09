@@ -1,0 +1,48 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-02-09T14:38:18Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 0.0.3
+    sha: da79f027f2f6034988a76e839a26db397a6a3795
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 54d083ecaaeddaae7f4181ab39b4f92e803fb0fb
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: chart version
+    sha: bb0d59831b919ddf9a1fed3075de6ea267b951b9
+  gitHttpUrl: https://github.com/property-xyz/data_postcode-yields-service
+  gitOwner: property-xyz
+  gitRepository: data_postcode-yields-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data_postcode-yields-service/releases/tag/v0.0.4
+  version: v0.0.4
+status: {}
+ 
+{{- end }}

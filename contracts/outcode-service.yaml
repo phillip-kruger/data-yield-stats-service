@@ -1,0 +1,75 @@
+---
+openapi: 3.0.3
+info:
+  title: outcode-stats-service
+  version: "1.0"
+paths:
+  /outcode/stats:
+    get:
+      parameters:
+      - name: outcode
+        in: query
+        schema:
+          type: string
+        examples:
+          W1:
+           value: "W1"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutcodeStats'
+              examples:
+                W1:
+                  value:
+                    avgPrice: 220435.3
+                    avgPricePsf: 0
+                    avgRent: 192.9
+                    avgYield: 4.6
+                    growth1y: -4.2
+                    growth3y: 0.4
+                    growth5y: 11.4
+                    outcode: W1
+                    salesPerMonth: 8
+                    turnover: 1
+                    effectiveDate: 1611764290170
+components:
+  schemas:
+    OutcodeStats:
+      type: object
+      properties:
+        avgPrice:
+          format: double
+          type: number
+        avgPricePsf:
+          format: double
+          type: number
+        avgRent:
+          format: double
+          type: number
+        avgYield:
+          format: double
+          type: number
+        effectiveDate:
+          format: int64
+          type: integer
+        growth1y:
+          format: double
+          type: number
+        growth3y:
+          format: double
+          type: number
+        growth5y:
+          format: double
+          type: number
+        outcode:
+          type: string
+        salesPerMonth:
+          format: int32
+          type: integer
+        turnover:
+          format: int32
+          type: integer

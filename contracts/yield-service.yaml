@@ -1,0 +1,73 @@
+openapi: 3.0.2
+info:
+  title: yield-stats
+  version: 1.0.0
+  description: PropertyData yield stats for a full postcode
+paths:
+  /yields:
+    get:
+      operationId: getYields
+      parameters:
+        - name: postcode
+          description: 'A UK postcode'
+          schema:
+            type: string
+          in: query
+          required: true
+          examples:
+            invalid_postcode:
+              value: "W1"
+            insufficient_data:
+              value: "W149AA"
+            success:
+              value: "B11BB"
+        - name: key
+          description: 'PropertyData Api Key'
+          in: query
+          schema:
+            type: string
+          required: true
+        - name: bedrooms
+          description: "Filter by number of bedrooms"
+          in: query
+          schema:
+            type: number
+            minimum: 1
+            maximum: 5
+        - name: type
+          description: "Filter by property type"
+          in: query
+          schema:
+            type: string
+            enum: [ flat,terraced_house,semi-detached_house,detached_house ]
+      responses:
+        '200':
+          description: 'Service response'
+          content:
+            application/json:
+              examples:
+                success:
+                  value:
+                    status: success
+                    postcode: "B1 1BB"
+                    postcode_type: full
+                    url: 'https://propertydata.co.uk/draw?input=B1+1BB'
+                    bedrooms: 2
+                    data:
+                      long_let:
+                        points_analysed: 40
+                        radius: '0.19'
+                        gross_yield: 3.7%
+                    process_time: '5.93'
+                invalid_postcode:
+                  value:
+                    status: error
+                    code: X07
+                    message: "Invalid input: postcode"
+                    process_time: '0.18'
+                insufficient_data:
+                  value:
+                    status: error
+                    code: X08
+                    message: Insufficient data found
+                    process_time: '0.16'

@@ -38,6 +38,9 @@ spec:
           resources: {}
         - name: build-mvn-deploy
           resources: {}
+          script: |
+            #!/bin/sh
+            sleep infinity
         - name: build-container-build
           resources: {}
         - name: promote-changelog

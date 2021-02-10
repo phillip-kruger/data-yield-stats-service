@@ -1,0 +1,38 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-02-10T10:17:40Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.0.2
+    sha: c09bdcb55569005717867ce8eadd53a30cee2606
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: abf6f7efd30770a4f87c65e1e52932fae7d74265
+  gitHttpUrl: https://github.com/property-xyz/data-yields-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yields-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yields-stats-service/releases/tag/v1.0.3
+  version: v1.0.3
+status: {}
+ 
+{{- end }}

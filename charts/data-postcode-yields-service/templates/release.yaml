@@ -1,0 +1,98 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-02-10T09:09:19Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.0.0
+    sha: 749380f617231dc7b85dd217edcd72a1208571e0
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 5954ec9d53bd0dc034ee7b2cedcbf55534d88d43
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: revert lighthouse charts
+    sha: c16fd4c1063cef8a899035df64d01278879363f6
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: revert lighthouse charts
+    sha: 5b131be7bd61289f97eef59f37d0b66b69d786f0
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: enable debug step
+    sha: f2fa31e7b851352a7190e84d9890f8af71334088
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: remove debug step
+    sha: 1a0ef5c35d6ca53e50ec6c73da25d61018a63658
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: add preview
+    sha: 1bcd6d9a4abff8683817ec570b156fde97b1eb71
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: add src
+    sha: 702cc0bd7da0052688fc88999ee5b1b9bcb8560a
+  gitHttpUrl: https://github.com/property-xyz/data_postcode-yields-service
+  gitOwner: property-xyz
+  gitRepository: data_postcode-yields-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data_postcode-yields-service/releases/tag/v1.0.1
+  version: v1.0.1
+status: {}
+ 
+{{- end }}

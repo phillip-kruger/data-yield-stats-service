@@ -1,0 +1,78 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-02-10T09:48:44Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.0.1
+    sha: d0bef3735e14792dafba450c61acd5bed83a02c8
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 68e58cd1ef28334f683551a2e1c8f15592cd9ead
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      debug: add sleep step
+    sha: 19dc76c327c10b9f619719c30d8cb08064baf190
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      debug: add sleep step
+    sha: 19c3fa9370ca90f481f5c4300f5cd489159fcc9e
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: pom version
+    sha: e7401daed7d9f5944bfc3088b18a0afdeef83834
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: revert lighthouse charts
+    sha: 7dcac7b1fc735b4620fd7896842fd9a7d92be340
+  gitHttpUrl: https://github.com/property-xyz/data_postcode-yields-service
+  gitOwner: property-xyz
+  gitRepository: data_postcode-yields-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yields-stats-service/releases/tag/v1.0.2
+  version: v1.0.2
+status: {}
+ 
+{{- end }}

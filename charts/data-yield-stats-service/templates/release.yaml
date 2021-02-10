@@ -1,0 +1,68 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-02-10T10:21:51Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.0.3
+    sha: 23256c0148ba7acf23367c206016697487bc51fa
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: e145cb8e11cd3ce795ed1750d18992f936c1781b
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix(plugins): use a better version of maven plugins
+    sha: 8f53c28505a75ab2ef67237de043643e0cb7c25f
+  - author:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    branch: master
+    committer:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    message: |
+      Add renovate.json
+    sha: 16d86ffa2e1d0b7f9dc41acc5c42dd5c774fdea8
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: raname project
+    sha: 6930f1ada5d3ad987ece880b8d273913f2c76c9e
+  gitHttpUrl: https://github.com/property-xyz/data-yields-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yields-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yields-stats-service/releases/tag/v1.0.4
+  version: v1.0.4
+status: {}
+ 
+{{- end }}

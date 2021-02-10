@@ -45,7 +45,7 @@ canary:
   host: ""
 
 service:
-  name: data-postcode-yields-service
+  name: data-yield-stats-service
   type: ClusterIP
   externalPort: 80
   internalPort: 8080

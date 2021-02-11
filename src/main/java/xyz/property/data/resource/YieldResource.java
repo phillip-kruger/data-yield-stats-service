@@ -50,9 +50,9 @@ public class YieldResource {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
-    public Uni<Response> getYield(@NonNull @QueryParam("postcode") String postcode,
-                                  @QueryParam("bedrooms") Integer bedrooms,
-                                  @QueryParam("type") String houseType) {
+    public Uni<Response> getYieldStats(@NonNull @QueryParam("postcode") String postcode,
+                                       @QueryParam("bedrooms") Integer bedrooms,
+                                       @QueryParam("type") String houseType) {
 
         validateRequest(postcode, bedrooms, houseType);
 

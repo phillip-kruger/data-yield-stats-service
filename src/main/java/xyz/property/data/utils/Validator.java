@@ -1,5 +1,6 @@
 package xyz.property.data.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -11,13 +12,16 @@ import javax.inject.Singleton;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Singleton
+@Slf4j
 public class Validator {
 
     @Inject
     @RestClient
     PostCodeService postCodeService;
 
-    public boolean isValidPostcode(String postcode) {
+    public boolean isValidFullPostcode(String postcode) {
+        log.info("Validating postcode: {}", postcode);
+
         PostCode lookupPostCode = postCodeService.lookupPostCode(postcode);
         return lookupPostCode.status == HttpStatus.SC_OK;
     }

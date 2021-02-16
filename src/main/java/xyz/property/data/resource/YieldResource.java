@@ -79,7 +79,7 @@ public class YieldResource {
 
     void validateRequest(String postcode, Integer bedrooms, String houseType) {
         checkNotNull(postcode);
-        checkArgument(validator.isValidPostcode(postcode));
+        checkArgument(validator.isValidFullPostcode(postcode));
 
         if (bedrooms != null) checkArgument(bedrooms > 1 && bedrooms <= 5);
         if (houseType != null) checkArgument(validator.isValidHouseType(houseType));

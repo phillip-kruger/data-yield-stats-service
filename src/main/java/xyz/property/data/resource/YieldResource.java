@@ -9,7 +9,8 @@ import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.hibernate.validator.constraints.Range;
-import xyz.property.data.annotations.HouseType;
+import org.jboss.logging.Logger;
+import xyz.property.data.annotations.ValidHouseType;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.OutCodeStats;
 import xyz.property.data.model.YieldStats;
@@ -25,7 +26,6 @@ import java.time.temporal.ChronoUnit;
 
 
 @Path("/yield")
-@Slf4j
 public class YieldResource {
 
     @Inject
@@ -47,6 +47,10 @@ public class YieldResource {
     String apiKey;
 
 
+    @Inject
+    Logger log;
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
@@ -55,12 +59,12 @@ public class YieldResource {
                                          @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
                                          @Nullable
                                          @QueryParam("bedrooms") Integer bedrooms,
-                                         @HouseType
+                                         @ValidHouseType
                                          @Nullable
                                          @QueryParam("type") String houseType) {
 
 
-        log.trace("Getting yield stats for postcode: " + postcode);
+        log.tracef("Getting yield stats for postcode: %s ",postcode);
 
         Uni<YieldStats> yieldStats;
 

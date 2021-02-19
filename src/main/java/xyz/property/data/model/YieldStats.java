@@ -25,4 +25,9 @@ public class YieldStats {
     public static class Data{
         public LongLet long_let;
     }
+
+    public YieldStats() {
+        this.data = new Data();
+        this.data.long_let = new LongLet();
+    }
 }

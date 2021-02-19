@@ -27,7 +27,7 @@ import static java.lang.annotation.ElementType.*;
 @Retention(RetentionPolicy.RUNTIME)
 @SupportedValidationTarget(ValidationTarget.ANNOTATED_ELEMENT)
 @ReportAsSingleViolation
-public @interface HouseType {
+public @interface ValidHouseType {
     String value() default "";
     String message() default  "Invalid house type: must be one of flat, terraced_house, semi-detached_house, detached_house";
 

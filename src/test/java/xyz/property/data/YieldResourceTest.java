@@ -4,18 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.http.HttpStatus;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import xyz.property.data.model.Response;
 import xyz.property.data.model.YieldStats;
 
 import javax.inject.Inject;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 @QuarkusTest
 public class YieldResourceTest {
@@ -74,16 +69,18 @@ public class YieldResourceTest {
     }
 
     @Test
-    void shouldFallbackToRegionPostcodeWhenNoData() {
-        Response response = given()
-                .queryParam("postcode", "W149AA")
+    void shouldFallbackToOutcodeStatsWithDistrictPostCode() throws JsonProcessingException {
+        YieldStats yieldStats = given()
+                .queryParam("postcode", "W1")
                 .when()
                 .get("/yield")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().as(Response.class);
-        assertThat(response.getPostcode()).isEqualTo("W1");
+                .extract().as(YieldStats.class);
+
+        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":0,\"data\":{\"long_let\":{\"points_analysed\":0,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
+        assertThat(yieldStats).usingRecursiveComparison().isEqualTo(mapper.readValue(expectedStats,YieldStats.class));
     }
 
 }

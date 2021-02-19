@@ -14,12 +14,11 @@ public interface OutcodeStatsMapper {
     OutcodeStatsMapper INSTANCE = Mappers.getMapper(OutcodeStatsMapper.class);
 
     @Mapping(source = "outcode", target = "postcode")
-    @Mapping(source="salesPerMonth", target= "average_sales_per_month")
-    @Mapping(source="turnover", target = "turnover_per_month")
     YieldStats outcodeStatsToYieldStats(OutCodeStats stats);
 
     @AfterMapping
     default void fillData(OutCodeStats outCodeStats, @MappingTarget YieldStats yieldStats) {
         yieldStats.postcode_type= "outcode";
+        yieldStats.data.long_let.gross_yield = Double.toString(outCodeStats.avgYield);
     }
 }

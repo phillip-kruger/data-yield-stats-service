@@ -4,7 +4,7 @@ info:
   title: outcode-stats-service
   version: "1.0"
 paths:
-  /outcode/stats:
+  /key-stats:
     get:
       parameters:
         - name: outcode

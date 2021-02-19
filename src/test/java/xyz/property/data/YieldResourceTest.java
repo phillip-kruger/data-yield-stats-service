@@ -24,9 +24,9 @@ public class YieldResourceTest {
     ObjectMapper mapper;
 
     @Test
-    void shouldGetInvalidRequestWithPostCodeW1() {
+    void shouldGetNotFoundWithInvalidPostcode() {
         given()
-                .queryParam("postcode", "W1")
+                .queryParam("postcode", "WW")
                 .when()
                 .get("/yield")
                 .then()

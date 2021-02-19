@@ -43,7 +43,7 @@ public class YieldResourceTest {
                 .get("/yield")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.SC_NOT_ACCEPTABLE);
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test

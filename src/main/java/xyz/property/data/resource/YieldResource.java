@@ -52,7 +52,7 @@ public class YieldResource {
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
     public Uni<YieldStats> getYieldStats(@NonNull @QueryParam("postcode") String postcode,
-                                         @Range(min = 1, max = 5)
+                                         @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
                                          @Nullable
                                          @QueryParam("bedrooms") Integer bedrooms,
                                          @HouseType

@@ -18,13 +18,13 @@ import javax.ws.rs.core.MediaType;
 public interface OutCodeStatsService {
 
     @GET()
-    @Path("outcode/stats")
+    @Path("key-stats")
     @Produces(MediaType.APPLICATION_JSON)
     Uni<OutCodeStats> getStats(@NotNull @QueryParam("outcode") String outcode);
 
 
     @GET
-    @Path("/q/health")
+    @Path("q/health")
     @Produces(MediaType.APPLICATION_JSON)
     HealthStatus getStatus();
 }

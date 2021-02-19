@@ -7,17 +7,17 @@ paths:
   /outcode/stats:
     get:
       parameters:
-      - name: outcode
-        in: query
-        schema:
-          type: string
-        examples:
-          W1:
-           value: "W1"
-        required: true
+        - name: outcode
+          in: query
+          schema:
+            type: string
+          examples:
+            W1:
+              value: "W1"
+          required: true
       responses:
         "200":
-          description: OK
+          description: W1 key stats
           content:
             application/json:
               schema:
@@ -36,6 +36,18 @@ paths:
                     salesPerMonth: 8
                     turnover: 1
                     effectiveDate: 1611764290170
+  /q/health:
+    get:
+      responses:
+        "200":
+          description: System UP
+          content:
+            application/json:
+              examples:
+                UP:
+                  value:
+                    status: "UP"
+
 components:
   schemas:
     OutcodeStats:

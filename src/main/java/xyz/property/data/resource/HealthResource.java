@@ -7,7 +7,7 @@ import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Liveness;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import xyz.property.data.model.HealthStatus;
-import xyz.property.data.model.PostCode;
+import xyz.property.data.model.PostCodeValidation;
 import xyz.property.data.service.OutCodeStatsService;
 import xyz.property.data.service.PostCodeService;
 
@@ -53,8 +53,8 @@ public class HealthResource implements HealthCheck {
     }
 
     private void checkPostcodeService(HealthCheckResponseBuilder responseBuilder) {
-        PostCode postCodeLookUp = postCodeService.lookupPostCode("NG5 4AU");
-        if (postCodeLookUp.status == HttpStatus.SC_OK) {
+        PostCodeValidation postCodeValidation = postCodeService.validateFullPostcode("NG5 4AU");
+        if (postCodeValidation.status == HttpStatus.SC_OK) {
             responseBuilder
                     .up()
                     .withData("Postcodes service:", "OK");

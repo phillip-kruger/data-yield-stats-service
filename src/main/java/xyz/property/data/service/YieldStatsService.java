@@ -19,13 +19,13 @@ import javax.ws.rs.core.MediaType;
 @Description("For a given UK postcode (full, district or sector) and optional filters, returns average property yield" +
              "from the smallest radius at which there is reasonable data.")
 @RegisterRestClient(configKey = "yield-service")
-public interface YieldService {
+public interface YieldStatsService {
 
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CacheResult(cacheName = "yield-data")
-    Uni<YieldStats> getByFullPostcode(@NonNull @QueryParam("key") String key,
+    Uni<YieldStats> getByFullPostCode(@NonNull @QueryParam("key") String key,
                                       @CacheKey @NonNull @QueryParam("postcode") String postcode,
                                       @CacheKey @QueryParam("bedrooms") Integer bedrooms,
                                       @CacheKey @QueryParam("type") String houseType);

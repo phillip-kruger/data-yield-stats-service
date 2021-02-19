@@ -1,5 +1,6 @@
 package xyz.property.data.resource;
 
+import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -7,20 +8,21 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import xyz.property.data.model.Response;
+import org.hibernate.validator.constraints.Range;
+import xyz.property.data.annotations.HouseType;
+import xyz.property.data.mapper.OutcodeStatsMapper;
+import xyz.property.data.model.OutCodeStats;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
 import xyz.property.data.service.PostCodeService;
-import xyz.property.data.service.YieldService;
-import xyz.property.data.utils.Validator;
+import xyz.property.data.service.YieldStatsService;
+import xyz.property.data.validator.PostCodeValidator;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.temporal.ChronoUnit;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Path("/yield")
 @Slf4j
@@ -28,7 +30,7 @@ public class YieldResource {
 
     @Inject
     @RestClient
-    YieldService yieldService;
+    YieldStatsService yieldStatsService;
 
     @Inject
     @RestClient
@@ -38,9 +40,8 @@ public class YieldResource {
     @RestClient
     PostCodeService postCodeService;
 
-
     @Inject
-    Validator validator;
+    PostCodeValidator postCodeValidator;
 
     @ConfigProperty(name = "provider.propertydata.api.key")
     String apiKey;
@@ -50,47 +51,32 @@ public class YieldResource {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
-    public Uni<Response> getYieldStats(@NonNull @QueryParam("postcode") String postcode,
-                                       @QueryParam("bedrooms") Integer bedrooms,
-                                       @QueryParam("type") String houseType) {
-
-        validateRequest(postcode, bedrooms, houseType);
-
-        Uni<YieldStats> yield = yieldService.getByFullPostcode(apiKey, postcode, bedrooms, houseType);
-
-        return yield.onItem()
-                .call(this::validateResponse)
-                .onItem()
-                .transformToUni(result -> Uni.createFrom().item(Response.builder()
-                        .postcode(result.postcode)
-                        .avgYield(result.data.long_let.gross_yield).build()))
-                .onFailure()
-                .recoverWithUni(() -> getOutcodeYield(postcode));
-    }
-
-    private Uni<Response> getOutcodeYield(String postcode) {
-        String outcode = postCodeService.lookupPostCode(postcode).result.outcode;
-        return outCodeStatsService.getStats(outcode)
-                .onItem()
-                .transformToUni(outCodeStats -> Uni.createFrom().item(Response.builder().postcode(outCodeStats.outcode)
-                        .avgYield(String.valueOf(outCodeStats.avgYield)).build()));
-    }
+    public Uni<YieldStats> getYieldStats(@NonNull @QueryParam("postcode") String postcode,
+                                         @Range(min = 1, max = 5)
+                                         @Nullable
+                                         @QueryParam("bedrooms") Integer bedrooms,
+                                         @HouseType
+                                         @Nullable
+                                         @QueryParam("type") String houseType) {
 
 
-    void validateRequest(String postcode, Integer bedrooms, String houseType) {
-        checkNotNull(postcode);
-        checkArgument(validator.isValidFullPostcode(postcode));
+        log.trace("Getting yield stats for postcode: " + postcode);
 
-        if (bedrooms != null) checkArgument(bedrooms > 1 && bedrooms <= 5);
-        if (houseType != null) checkArgument(validator.isValidHouseType(houseType));
-    }
+        Uni<YieldStats> yieldStats;
 
-    private Uni<?> validateResponse(YieldStats response) {
-        //ref: https://propertydata.co.uk/api/documentation/error-reference)
-        if (response.status.equals("error")) {
-            log.warn("[YieldStats]: received error code {} while retrieving yield stats.", response.code);
-            return Uni.createFrom().failure(new NotFoundException());
+        if (postCodeValidator.isValidFullPostCode(postcode)) {
+            yieldStats = yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType);
+        } else if (postCodeValidator.isValidOutCode(postcode)) {
+            Uni<OutCodeStats> outCodeStats = outCodeStatsService.getStats(postcode);
+            yieldStats = outCodeStats
+                    .onItem()
+                    .transformToUni(stats -> Uni.createFrom()
+                            .item(OutcodeStatsMapper.INSTANCE.outcodeStatsToYieldStats(stats)))
+                    .onFailure().retry().atMost(3);
+        } else {
+            log.warn("Postcode " + postcode + " is deemed invalid.");
+            yieldStats = Uni.createFrom().failure(NotFoundException::new);
         }
-        return Uni.createFrom().voidItem();
+        return yieldStats;
     }
 }

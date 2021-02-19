@@ -1,4 +1,4 @@
-package xyz.property.data.utils;
+package xyz.property.data.model;
 
 import lombok.AllArgsConstructor;
 import lombok.ToString;

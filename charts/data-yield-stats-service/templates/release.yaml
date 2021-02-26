@@ -1,0 +1,58 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-02-26T16:16:18Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.1.2
+    sha: 1d1b5e9a3774fa9731b901b352778030f972af3e
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 6db666f0aba26947bd85f5ec3c37794721e9cdf4
+  - author:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    branch: master
+    committer:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    message: |
+      chore(deps): update dependency io.quarkus:quarkus-maven-plugin to v1.12.0.final
+    sha: 450c982f8c7ee18eeda48a411058a016c278f71c
+  - author:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    branch: master
+    committer:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    message: |
+      chore(deps): update dependency io.quarkus:quarkus-universe-bom to v1.11.3.final
+    sha: ac89101bf550ccd38d975c0ef736f8317b656e73
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.2.0
+  version: v1.2.0
+status: {}
+ 
+{{- end }}

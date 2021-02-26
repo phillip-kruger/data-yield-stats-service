@@ -46,8 +46,12 @@ paths:
               examples:
                 UP:
                   value:
-                    status: "UP"
-
+                    status: UP
+                    checks:
+                      - name: Elasticsearch cluster health check
+                        status: UP
+                        data:
+                          status: yellow
 components:
   schemas:
     OutcodeStats:

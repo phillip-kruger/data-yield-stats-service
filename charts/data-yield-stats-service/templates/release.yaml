@@ -1,0 +1,48 @@
+{{- if .Capabilities.APIVersions.Has "jenkins.io/v1/Release" }}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-03-18T15:31:25Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.2.2
+    sha: a24059db2b278573f048a069f84c97dd37ff1896
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 436cbed80f8538c9f8d3cd465d7c609b99ba4c79
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: ingress host
+    sha: bab0361af7d8eba1cbab74e9e12760fb6290a283
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.3.0
+  version: v1.3.0
+status: {}
+ 
+{{- end }}

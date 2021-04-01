@@ -49,16 +49,17 @@ paths:
                 success:
                   value:
                     status: success
-                    postcode: "B1 1BB"
+                    postcode: B1 1BB
                     postcode_type: full
                     url: 'https://propertydata.co.uk/draw?input=B1+1BB'
                     bedrooms: 2
+                    type: flat
                     data:
                       long_let:
                         points_analysed: 40
-                        radius: '0.19'
-                        gross_yield: 3.7%
-                    process_time: '5.93'
+                        radius: '0.17'
+                        gross_yield: 4.2%
+                    process_time: '2.64'
                 invalid_postcode:
                   value:
                     status: error

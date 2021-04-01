@@ -64,7 +64,7 @@ public class YieldResourceTest {
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().as(YieldStats.class);
-        String expectedStats = "{\"status\":\"success\",\"code\":null,\"message\":null,\"process_time\":\"5.93\",\"postcode\":\"B1 1BB\",\"postcode_type\":\"full\",\"url\":\"https://propertydata.co.uk/draw?input=B1+1BB\",\"bedrooms\":2,\"data\":{\"long_let\":{\"points_analysed\":40,\"radius\":\"0.19\",\"gross_yield\":\"3.7%\"}}}";
+        String expectedStats = "{\"status\":\"success\",\"postcode\":\"B1 1BB\",\"postcode_type\":\"full\",\"url\":\"https://propertydata.co.uk/draw?input=B1+1BB\",\"bedrooms\":2,\"type\":\"flat\",\"data\":{\"long_let\":{\"points_analysed\":40,\"radius\":\"0.17\",\"gross_yield\":\"4.2%\"}},\"process_time\":\"2.64\"}";
         assertThat(yieldStats).usingRecursiveComparison().isEqualTo(mapper.readValue(expectedStats,YieldStats.class));
     }
 

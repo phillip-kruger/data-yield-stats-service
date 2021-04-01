@@ -14,6 +14,7 @@ public class YieldStats {
     public String postcode_type;
     public String url;
     public int bedrooms;
+    public String type;
     public Data data;
 
     public static class LongLet{

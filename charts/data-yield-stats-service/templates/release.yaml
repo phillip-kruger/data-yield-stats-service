@@ -1,0 +1,78 @@
+{{- if and (.Capabilities.APIVersions.Has "jenkins.io/v1/Release") (hasKey .Values.jx "releaseCRD") (.Values.jx.releaseCRD)}}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-04-01T08:18:44Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.4.0
+    sha: 33bd0c068568b6f287d4b75f5dbe682df490aa4c
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 035f684c5640db20ba54bf1af5b29d58a5bd85e3
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: disable OIDC for tests
+    sha: ccc2b706683227e16e067a1cc2da0f75b015762d
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: add oidc secrets
+    sha: dcc2ab12587947df571739e026503f3bdc9874c5
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: add OIDC configuration
+    sha: 0f6574add756590afcecccc6a62867d3e7e8e579
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      feat: add keycloak authorisation
+    sha: 5bca60809dc231d5570a901b4f921e686a07e051
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.4.1
+  version: v1.4.1
+status: {}
+ 
+{{- end }}

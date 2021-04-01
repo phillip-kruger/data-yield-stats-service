@@ -1,8 +1,5 @@
 package xyz.property.data.model;
 
-import lombok.ToString;
-
-@ToString
 public enum HouseType {
     flat("flat"),
     terraced("terraced_house"),
@@ -12,5 +9,9 @@ public enum HouseType {
 
     HouseType(String houseType) {
         typeName = houseType;
+    }
+
+    public String toString() {
+        return typeName;
     }
 }

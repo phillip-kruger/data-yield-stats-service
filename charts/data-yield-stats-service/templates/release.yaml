@@ -1,0 +1,88 @@
+{{- if and (.Capabilities.APIVersions.Has "jenkins.io/v1/Release") (hasKey .Values.jx "releaseCRD") (.Values.jx.releaseCRD)}}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-04-02T14:23:50Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.4.3
+    sha: 29f7a7c59b06619f207c2e55a85603eb24587aa5
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: bdfc4a3dc32c4bf1fc8c4dcdc4e27ad2c2219a51
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: disable Sentry for test
+    sha: 4b042a8110ec7da29c5896432c0a94b14e80a2e8
+  - author:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    branch: master
+    committer:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    message: |
+      chore(deps): update dependency io.quarkus:quarkus-maven-plugin to v1.13.0.final
+    sha: 008da590aefd85455a237c52c5fed1d999f333b3
+  - author:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    branch: master
+    committer:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    message: |
+      chore(deps): update dependency org.projectlombok:lombok to v1.18.20
+    sha: 23f893327dd26a8c941146ad3efec84012219fc1
+  - author:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    branch: master
+    committer:
+      email: bot@renovateapp.com
+      name: Renovate Bot
+    message: |
+      chore(deps): update dependency io.quarkus:quarkus-universe-bom to v1.13.0.final
+    sha: e12d41a1ea18797660ad442de9c13756b77fc361
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: hpa service name
+    sha: a8a2372623ca1b104efa21d894c02e9dea0ccfb8
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.4.4
+  version: v1.4.4
+status: {}
+ 
+{{- end }}

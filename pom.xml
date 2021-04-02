@@ -19,7 +19,7 @@
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <assertj-core.version>3.19.0</assertj-core.version>
     <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
-    <lombok.version>1.18.18</lombok.version>
+    <lombok.version>1.18.20</lombok.version>
   </properties>
   <dependencyManagement>
     <dependencies>

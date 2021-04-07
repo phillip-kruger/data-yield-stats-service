@@ -3,7 +3,6 @@ package xyz.property.data.resource;
 import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
@@ -64,21 +63,41 @@ public class YieldResource {
                                          @QueryParam("type") String houseType) {
 
 
-        log.tracef("Getting yield stats for postcode: %s ",postcode);
+        log.tracef("Getting yield stats for postcode: %s ", postcode);
 
         Uni<YieldStats> yieldStats;
 
         if (postCodeValidator.isValidFullPostCode(postcode)) {
             yieldStats = yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType);
-        } else if (postCodeValidator.isValidOutCode(postcode)) {
-            Uni<OutCodeStats> outCodeStats = outCodeStatsService.getStats(postcode);
+        } else {
+            yieldStats = getYield(postcode);
+        }
+        return yieldStats;
+    }
+
+    @GET
+    @Path("/outcode")
+    @Produces(MediaType.APPLICATION_JSON)
+    @CircuitBreaker(skipOn = IllegalArgumentException.class)
+    @Timeout(value = 5, unit = ChronoUnit.SECONDS)
+    public Uni<YieldStats> getYieldOutcodeStats(@NonNull @QueryParam("outcode") String outcode) {
+
+        log.tracef("Getting yield stats for outcode: %s ", outcode);
+        return getYield(outcode);
+    }
+
+    private Uni<YieldStats> getYield(String outcode) {
+        Uni<YieldStats> yieldStats;
+
+        if (postCodeValidator.isValidOutCode(outcode)) {
+            Uni<OutCodeStats> outCodeStats = outCodeStatsService.getStats(outcode);
             yieldStats = outCodeStats
                     .onItem()
                     .transformToUni(stats -> Uni.createFrom()
                             .item(OutcodeStatsMapper.INSTANCE.outcodeStatsToYieldStats(stats)))
                     .onFailure().retry().atMost(3);
         } else {
-            log.warn("Postcode " + postcode + " is deemed invalid.");
+            log.warn("Postcode/outcode " + outcode + " is deemed invalid.");
             yieldStats = Uni.createFrom().failure(NotFoundException::new);
         }
         return yieldStats;

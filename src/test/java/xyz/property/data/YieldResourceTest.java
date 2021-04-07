@@ -64,7 +64,21 @@ public class YieldResourceTest {
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().as(YieldStats.class);
-        String expectedStats = "{\"status\":\"success\",\"postcode\":\"B1 1BB\",\"postcode_type\":\"full\",\"url\":\"https://propertydata.co.uk/draw?input=B1+1BB\",\"bedrooms\":2,\"type\":\"flat\",\"data\":{\"long_let\":{\"points_analysed\":40,\"radius\":\"0.17\",\"gross_yield\":\"4.2%\"}},\"process_time\":\"2.64\"}";
+        String expectedStats = "{\"status\":\"success\",\"code\":null,\"type\":\"flat\",\"message\":null,\"process_time\":\"2.64\",\"postcode\":\"B1 1BB\",\"postcode_type\":\"full\",\"url\":\"https://propertydata.co.uk/draw?input=B1+1BB\",\"bedrooms\":2,\"data\":{\"long_let\":{\"points_analysed\":40,\"radius\":\"0.17\",\"gross_yield\":\"4.2%\"}}}";
+        assertThat(yieldStats).usingRecursiveComparison().isEqualTo(mapper.readValue(expectedStats,YieldStats.class));
+    }
+
+    @Test
+    void shouldGetOutcodeYieldWithValidOutcode() throws JsonProcessingException {
+        YieldStats yieldStats = given()
+                .queryParam("outcode", "B1")
+                .when()
+                .get("/yield/outcode")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().as(YieldStats.class);
+        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":0,\"data\":{\"long_let\":{\"points_analysed\":0,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
         assertThat(yieldStats).usingRecursiveComparison().isEqualTo(mapper.readValue(expectedStats,YieldStats.class));
     }
 

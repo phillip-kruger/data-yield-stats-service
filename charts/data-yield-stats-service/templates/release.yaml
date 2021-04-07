@@ -1,0 +1,48 @@
+{{- if and (.Capabilities.APIVersions.Has "jenkins.io/v1/Release") (hasKey .Values.jx "releaseCRD") (.Values.jx.releaseCRD)}}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-04-07T14:20:43Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.4.5
+    sha: 5c1a959a7893a5658b2a833bb4ac0c8dca58b8e3
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: dfa80cd70f5f520babdbc9f8fe6203bf657c2dce
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      chore: update hpa version
+    sha: 3709014a282b32956fbcf8e0e3479e94c116ab78
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.5.0
+  version: v1.5.0
+status: {}
+ 
+{{- end }}

@@ -73,7 +73,7 @@ public class YieldResourceTest {
         YieldStats yieldStats = given()
                 .queryParam("outcode", "B1")
                 .when()
-                .get("/yield/outcode")
+                .get("/yield")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)

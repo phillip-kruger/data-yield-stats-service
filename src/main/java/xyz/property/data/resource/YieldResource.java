@@ -2,7 +2,6 @@ package xyz.property.data.resource;
 
 import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
-import lombok.NonNull;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
@@ -54,7 +53,8 @@ public class YieldResource {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
-    public Uni<YieldStats> getYieldStats(@NonNull @QueryParam("postcode") String postcode,
+    public Uni<YieldStats> getYieldStats(@QueryParam("postcode") String postcode,
+                                         @QueryParam("outcode") String outcode,
                                          @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
                                          @Nullable
                                          @QueryParam("bedrooms") Integer bedrooms,
@@ -62,28 +62,23 @@ public class YieldResource {
                                          @Nullable
                                          @QueryParam("type") String houseType) {
 
-
         log.tracef("Getting yield stats for postcode: %s ", postcode);
 
         Uni<YieldStats> yieldStats;
 
-        if (postCodeValidator.isValidFullPostCode(postcode)) {
-            yieldStats = yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType);
+        if (postcode != null) {
+            if (postCodeValidator.isValidFullPostCode(postcode)) {
+                yieldStats = yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType);
+            } else {
+                yieldStats = getYield(postcode);
+            }
+        } else if (outcode != null) {
+            yieldStats = getYield(outcode);
         } else {
-            yieldStats = getYield(postcode);
+            yieldStats = Uni.createFrom().failure(NotAcceptableException::new);
         }
+
         return yieldStats;
-    }
-
-    @GET
-    @Path("/outcode")
-    @Produces(MediaType.APPLICATION_JSON)
-    @CircuitBreaker(skipOn = IllegalArgumentException.class)
-    @Timeout(value = 5, unit = ChronoUnit.SECONDS)
-    public Uni<YieldStats> getYieldOutcodeStats(@NonNull @QueryParam("outcode") String outcode) {
-
-        log.tracef("Getting yield stats for outcode: %s ", outcode);
-        return getYield(outcode);
     }
 
     private Uni<YieldStats> getYield(String outcode) {

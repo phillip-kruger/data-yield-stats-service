@@ -1,0 +1,60 @@
+{{- if and (.Capabilities.APIVersions.Has "jenkins.io/v1/Release") (hasKey .Values.jx "releaseCRD") (.Values.jx.releaseCRD)}}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-04-08T06:50:44Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.5.0
+    sha: f76a6226b991166e7dedadfe3d3a3546ab53e19d
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 66550c6307617ca1cbbff52ea196dd11e1f42640
+  - author:
+      email: 69356325+kannann1@users.noreply.github.com
+      name: Kannan Narayanasamy
+    branch: master
+    committer:
+      email: noreply@github.com
+      name: GitHub
+    issueIds:
+    - "10"
+    message: |-
+      feat: add outcode yield endpoint (#10)
+
+      feat: add outcode yield endpoint
+    sha: 91fec09931fa18d44c742fc1bf9e2f1c95f0a420
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  pullRequests:
+  - creationTimestamp: "2021-04-07T14:06:45Z"
+    id: "10"
+    labels:
+    - url: size/M
+    state: closed
+    title: 'feat: add outcode yield endpoint'
+    url: https://github.com/property-xyz/data-yield-stats-service/pull/10
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.5.1
+  version: v1.5.1
+status: {}
+ 
+{{- end }}

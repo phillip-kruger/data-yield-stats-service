@@ -1,10 +1,13 @@
 {
-  "extends": [ "config:base" ],
-    "packageRules": [
-      {
-        "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-        "automerge": true
-      }
-    ]
-  }
+  "extends": [
+    "config:base"
+      ":pinVersions",
+      ":separateMultipleMajorReleases",
+      ":combinePatchMinorReleases",
+      ":ignoreModulesAndTests",
+      ":automergePatch",
+      ":automergeMinor",
+      ":pinSkipCi",
+      "group:allNonMajor"
+  ]
 }

@@ -1,0 +1,68 @@
+{{- if and (.Capabilities.APIVersions.Has "jenkins.io/v1/Release") (hasKey .Values.jx "releaseCRD") (.Values.jx.releaseCRD)}}
+apiVersion: jenkins.io/v1
+kind: Release
+metadata:
+  creationTimestamp: "2021-04-12T12:28:55Z"
+  deletionTimestamp: null
+  name: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  commits:
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: release 1.5.3
+    sha: c8c0c025801377cb7d699e18c1e7626e3043a750
+  - author:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    branch: master
+    committer:
+      email: jenkins-x@googlegroups.com
+      name: jenkins-x-bot
+    message: |
+      chore: add variables
+    sha: 80eb42ea29872e8490a5a2b8c7c398ade1d31238
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: configure automerge for renovate-bot
+    sha: 946f2bfaf1efa7789bc1a878eda48b827f1f1baa
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: configure automerge for renovate-bot
+    sha: 1dfe2276ae6672ac7caff196fb56837e5a0ad0de
+  - author:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    branch: master
+    committer:
+      email: simone@property.xyz
+      name: Simone Di Cola
+    message: |
+      fix: configure automerge for renovate-bot
+    sha: bde12484886c88cbaba4e3e97e034ad77a70df06
+  gitHttpUrl: https://github.com/property-xyz/data-yield-stats-service
+  gitOwner: property-xyz
+  gitRepository: data-yield-stats-service
+  name: '{{ .Chart.Name }}'
+  releaseNotesURL: https://github.com/property-xyz/data-yield-stats-service/releases/tag/v1.5.4
+  version: v1.5.4
+status: {}
+ 
+{{- end }}

@@ -26,5 +26,5 @@ public interface OutCodeStatsService {
     @GET
     @Path("q/health")
     @Produces(MediaType.APPLICATION_JSON)
-    Uni<HealthStatus> getStatus();
+    HealthStatus getStatus();
 }

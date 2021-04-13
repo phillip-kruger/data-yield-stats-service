@@ -13,6 +13,7 @@ import xyz.property.data.service.PostCodeService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.Duration;
 
 
 @Liveness
@@ -39,32 +40,30 @@ public class HealthResource implements HealthCheck {
     }
 
     private void checkOutcodeService(HealthCheckResponseBuilder responseBuilder) {
-        outCodeStatsService.getStatus().onItem()
-                .invoke(serviceStatus -> {
-                    if ((serviceStatus.status.equals("UP"))) {
-                        responseBuilder
-                                .up()
-                                .withData("Outcode Stats service:", "OK");
-                    } else {
-                        responseBuilder
-                                .down()
-                                .withData("Outcode Stats service:", "KO");
-                    }
-                });
+        if ((outCodeStatsService.getStatus().status.equals("UP"))) {
+            responseBuilder
+                    .up()
+                    .withData("Outcode Stats service:", "OK");
+        } else {
+            responseBuilder
+                    .down()
+                    .withData("Outcode Stats service:", "KO");
+        }
     }
 
     private void checkPostcodeService(HealthCheckResponseBuilder responseBuilder) {
-        postCodeService.validateFullPostcode("NG5 4AU").onItem()
-                .invoke(postCodeValidation -> {
-                    if (postCodeValidation.status == HttpStatus.SC_OK) {
-                        responseBuilder
-                                .up()
-                                .withData("Postcodes service:", "OK");
-                    } else {
-                        responseBuilder
-                                .down()
-                                .withData("Postcodes service:", "KO");
-                    }
-                });
+        int postcodeServiceStatus = postCodeService.validateFullPostcode("NG5 4AU")
+                .await()
+                .atMost(Duration.ofMillis(2000))
+                .status;
+        if (postcodeServiceStatus == HttpStatus.SC_OK) {
+            responseBuilder
+                    .up()
+                    .withData("Postcodes service:", "OK");
+        } else {
+            responseBuilder
+                    .down()
+                    .withData("Postcodes service:", "KO");
+        }
     }
 }

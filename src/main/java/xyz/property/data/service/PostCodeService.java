@@ -1,5 +1,6 @@
 package xyz.property.data.service;
 
+import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import xyz.property.data.model.OutCodeValidation;
 import xyz.property.data.model.PostCodeValidation;
@@ -17,10 +18,10 @@ public interface PostCodeService {
     @GET
     @Path("/{postcode}/validate")
     @Produces(MediaType.APPLICATION_JSON)
-    PostCodeValidation validateFullPostcode(@PathParam("postcode") String postcode);
+    Uni<PostCodeValidation> validateFullPostcode(@PathParam("postcode") String postcode);
 
     @GET
     @Path("/{outcode}/autocomplete")
     @Produces(MediaType.APPLICATION_JSON)
-    OutCodeValidation validateOutCode(@PathParam("outcode") String outcode);
+    Uni<OutCodeValidation> validateOutCode(@PathParam("outcode") String outcode);
 }

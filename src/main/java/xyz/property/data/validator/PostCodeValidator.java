@@ -1,15 +1,14 @@
 package xyz.property.data.validator;
 
+import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
-import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
-import xyz.property.data.model.PostCodeValidation;
 import xyz.property.data.service.PostCodeService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.validation.ConstraintValidatorContext;
+import javax.ws.rs.NotFoundException;
 
 @Singleton
 public class PostCodeValidator {
@@ -21,18 +20,34 @@ public class PostCodeValidator {
     @Inject
     Logger log;
 
-    public boolean isValidFullPostCode(@NonNull String postcode) {
+    public Uni<Void> isValidFullPostCode(@NonNull String postcode) {
         log.infof("Validating postcode: %s", postcode);
-        return postCodeService.validateFullPostcode(postcode).result;
+        return postCodeService.validateFullPostcode(postcode)
+                .onItem()
+                .transform(postCodeValidation -> {
+                    if (postCodeValidation.result) {
+                        return null;
+                    } else {
+                        throw new NotFoundException();
+                    }
+                });
     }
 
-    public boolean isValidOutCode(@NonNull String outcode) {
+    public Uni<Void> isValidOutCode(@NonNull String outcode) {
         log.infof("Validating outcode %s ", outcode);
 
         /*
            Postcodes.io does not offer am outcodeValidation api. Hence,
            we use autocomplete to check if the outcode is valid.
          */
-        return postCodeService.validateOutCode(outcode).result != null;
+        return postCodeService.validateOutCode(outcode)
+                .onItem()
+                .transform(outCodeValidation -> {
+                    if (outCodeValidation.result != null) {
+                        return null;
+                    } else {
+                        throw new NotFoundException();
+                    }
+                });
     }
 }

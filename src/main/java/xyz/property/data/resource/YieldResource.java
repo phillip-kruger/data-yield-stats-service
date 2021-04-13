@@ -6,6 +6,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.jboss.logging.Logger;
 import xyz.property.data.annotations.ValidHouseType;
@@ -53,8 +54,9 @@ public class YieldResource {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
-    public Uni<YieldStats> getYieldStats(@QueryParam("postcode") String postcode,
-                                         @QueryParam("outcode") String outcode,
+    public Uni<YieldStats> getYieldStats(@QueryParam("postcode")
+                                         @Length(min = 2, max = 7, message = "A valid postcode must contain between 2 and 7 alphanumeric characters.")
+                                         String postcode,
                                          @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
                                          @Nullable
                                          @QueryParam("bedrooms") Integer bedrooms,
@@ -62,39 +64,49 @@ public class YieldResource {
                                          @Nullable
                                          @QueryParam("type") String houseType) {
 
-        log.tracef("Getting yield stats for postcode: %s ", postcode);
+        log.infof("Getting yield stats for postcode: %s ", postcode);
 
-        Uni<YieldStats> yieldStats;
-
-        if (postcode != null) {
-            if (postCodeValidator.isValidFullPostCode(postcode)) {
-                yieldStats = yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType);
-            } else {
-                yieldStats = getYield(postcode);
-            }
-        } else if (outcode != null) {
-            yieldStats = getYield(outcode);
-        } else {
-            yieldStats = Uni.createFrom().failure(NotAcceptableException::new);
-        }
-
-        return yieldStats;
+        return postCodeValidator.isValidFullPostCode(postcode)
+                .onItemOrFailure().transformToUni((value, error) -> {
+                    if (error == null) {
+                        return getYieldStatsByPostCode(postcode, bedrooms, houseType);
+                    } else {
+                        log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", postcode);
+                        return getYieldStatsByOutcode(postcode);
+                    }
+                });
     }
 
-    private Uni<YieldStats> getYield(String outcode) {
-        Uni<YieldStats> yieldStats;
+    private Uni<YieldStats> getYieldStatsByPostCode(String postcode, Integer bedrooms, String houseType) {
+        return yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType)
+                .onFailure()
+                    .retry()
+                    .atMost(3)
+                .onFailure()
+                    .recoverWithUni(o -> Uni.createFrom().failure(new NotFoundException()));
+    }
 
-        if (postCodeValidator.isValidOutCode(outcode)) {
-            Uni<OutCodeStats> outCodeStats = outCodeStatsService.getStats(outcode);
-            yieldStats = outCodeStats
-                    .onItem()
-                    .transformToUni(stats -> Uni.createFrom()
-                            .item(OutcodeStatsMapper.INSTANCE.outcodeStatsToYieldStats(stats)))
-                    .onFailure().retry().atMost(3);
-        } else {
-            log.warn("Postcode/outcode " + outcode + " is deemed invalid.");
-            yieldStats = Uni.createFrom().failure(NotFoundException::new);
-        }
-        return yieldStats;
+
+    public Uni<YieldStats> getYieldStatsByOutcode(String outcode) {
+
+        log.infof("Getting yield stats for outcode: %s ", outcode);
+
+        return postCodeValidator.isValidOutCode(outcode)
+                .onItemOrFailure()
+                .transformToUni((value, error) -> {
+                    if(error == null){
+                      return outCodeStatsService.getStats(outcode)
+                        .onFailure()
+                            .retry()
+                            .atMost(3)
+                        .map(OutcodeStatsMapper.INSTANCE::outcodeStatsToYieldStats)
+                            .onFailure()
+                            .recoverWithUni(o -> Uni.createFrom().failure(new NotFoundException()));
+                    }
+                    else{
+                        log.warnf("Outcode %s is deemed invalid", outcode);
+                        return  Uni.createFrom().failure(new NotFoundException());
+                    }
+                });
     }
 }

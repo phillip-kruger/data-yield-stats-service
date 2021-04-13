@@ -20,13 +20,13 @@ class HouseTypeValidatorTest {
     }
 
     @Test
-    void houseTypeValidatorShouldFailForInvalidHouseTypes() {
+    void shouldFailForInvalidHouseTypes() {
         assertThat(validator.isValid("terraced", null)).isEqualTo(false);
         assertThat(validator.isValid("semiDetached", null)).isEqualTo(false);
     }
 
     @Test
-    void houseTypeValidatorShouldPassForValidHouseTypes() {
+    void shouldPassForValidHouseTypes() {
         assertThat(validator.isValid(null, null)).isEqualTo(true);
         assertThat(validator.isValid("detached_house", null)).isEqualTo(true);
         assertThat(validator.isValid("semi-detached_house", null)).isEqualTo(true);

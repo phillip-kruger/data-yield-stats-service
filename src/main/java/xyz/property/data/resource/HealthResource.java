@@ -39,29 +39,32 @@ public class HealthResource implements HealthCheck {
     }
 
     private void checkOutcodeService(HealthCheckResponseBuilder responseBuilder) {
-        HealthStatus outcodeServiceStatus = outCodeStatsService.getStatus();
-
-        if ((outcodeServiceStatus.status.equals("UP"))) {
-            responseBuilder
-                    .up()
-                    .withData("Outcode Stats service:", "OK");
-        } else {
-            responseBuilder
-                    .down()
-                    .withData("Outcode Stats service:", "KO");
-        }
+        outCodeStatsService.getStatus().onItem()
+                .invoke(serviceStatus -> {
+                    if ((serviceStatus.status.equals("UP"))) {
+                        responseBuilder
+                                .up()
+                                .withData("Outcode Stats service:", "OK");
+                    } else {
+                        responseBuilder
+                                .down()
+                                .withData("Outcode Stats service:", "KO");
+                    }
+                });
     }
 
     private void checkPostcodeService(HealthCheckResponseBuilder responseBuilder) {
-        PostCodeValidation postCodeValidation = postCodeService.validateFullPostcode("NG5 4AU");
-        if (postCodeValidation.status == HttpStatus.SC_OK) {
-            responseBuilder
-                    .up()
-                    .withData("Postcodes service:", "OK");
-        } else {
-            responseBuilder
-                    .down()
-                    .withData("Postcodes service:", "KO");
-        }
+        postCodeService.validateFullPostcode("NG5 4AU").onItem()
+                .invoke(postCodeValidation -> {
+                    if (postCodeValidation.status == HttpStatus.SC_OK) {
+                        responseBuilder
+                                .up()
+                                .withData("Postcodes service:", "OK");
+                    } else {
+                        responseBuilder
+                                .down()
+                                .withData("Postcodes service:", "KO");
+                    }
+                });
     }
 }

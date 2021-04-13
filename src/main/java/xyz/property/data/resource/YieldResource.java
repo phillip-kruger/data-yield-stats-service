@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Range;
 import org.jboss.logging.Logger;
 import xyz.property.data.annotations.ValidHouseType;
 import xyz.property.data.mapper.OutcodeStatsMapper;
-import xyz.property.data.model.OutCodeStats;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
 import xyz.property.data.service.PostCodeService;
@@ -55,7 +54,7 @@ public class YieldResource {
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
     public Uni<YieldStats> getYieldStats(@QueryParam("postcode")
-                                         @Length(min = 2, max = 7, message = "A valid postcode must contain between 2 and 7 alphanumeric characters.")
+                                         @Length(min = 2, max = 8, message = "A valid postcode must contain between 2 and 8 alphanumeric characters.")
                                          String postcode,
                                          @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
                                          @Nullable

@@ -26,8 +26,10 @@ public class PostCodeValidator {
                 .onItem()
                 .transform(postCodeValidation -> {
                     if (postCodeValidation.result) {
+                        log.infof("Postcode %s is valid", postcode);
                         return null;
                     } else {
+                        log.warnf("Postcode %s is invalid", postcode);
                         throw new NotFoundException();
                     }
                 });
@@ -44,8 +46,10 @@ public class PostCodeValidator {
                 .onItem()
                 .transform(outCodeValidation -> {
                     if (outCodeValidation.result != null) {
+                        log.infof("Outcode %s is valid", outcode);
                         return null;
                     } else {
+                        log.warnf("Outcode %s is invalid", outcode);
                         throw new NotFoundException();
                     }
                 });

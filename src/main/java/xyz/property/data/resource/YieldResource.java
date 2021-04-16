@@ -94,6 +94,7 @@ public class YieldResource {
                 .onItemOrFailure()
                 .transformToUni((value, error) -> {
                     if(error == null){
+                        log.infof("Invoking outcode stats service for outcode: %s", outcode);
                       return outCodeStatsService.getStats(outcode)
                         .onFailure()
                             .retry()

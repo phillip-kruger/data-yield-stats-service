@@ -84,7 +84,7 @@ public class YieldResource {
                         log.infof("Successfully fetched yield stats for postcode: %s", postcode);
                         return Uni.createFrom().item(value);
                     } else {
-                        log.warnf("Unsuccessfully fetched yield for postcode: %s. Trying to recover using its outcode.", postcode);
+                        log.warnf("Unsuccessfully fetched yield stats for postcode: %s. Trying to recover using its outcode.", postcode);
                         return postCodeService.lookupPostcode(postcode)
                                 .onFailure()
                                     .invoke(() -> log.errorf("Error while looking up for postcode: %s", postcode))

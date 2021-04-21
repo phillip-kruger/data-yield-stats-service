@@ -53,6 +53,23 @@ public class YieldResourceTest {
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
+    @Test
+    void shouldFallBackToOutCodeStatsWhenInsufficientData() throws JsonProcessingException {
+        YieldStats yieldStats = given()
+                .queryParam("postcode", "W149AA")
+                .when()
+                .get("/yield")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .body().as(YieldStats.class);
+
+        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":0,\"data\":{\"long_let\":{\"points_analysed\":0,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
+        assertThat(yieldStats).usingRecursiveComparison().isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
+
+    }
+
 
     @Test
     void shouldGetYieldWithValidPostcode() throws JsonProcessingException {
@@ -84,7 +101,7 @@ public class YieldResourceTest {
 
     @Test
     void shouldFailWithInvalidOutcode() throws JsonProcessingException {
-            given()
+        given()
                 .queryParam("postcode", "W")
                 .when()
                 .get("/yield")

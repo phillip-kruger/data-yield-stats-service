@@ -55,7 +55,7 @@ public class YieldResource {
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
     public Uni<YieldStats> getYieldStats(@QueryParam("postcode")
                                          @Length(min = 2, max = 8, message = "A valid postcode must contain between 2 and 8 alphanumeric characters.")
-                                         String postcode,
+                                                 String postcode,
                                          @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
                                          @Nullable
                                          @QueryParam("bedrooms") Integer bedrooms,
@@ -78,11 +78,22 @@ public class YieldResource {
 
     private Uni<YieldStats> getYieldStatsByPostCode(String postcode, Integer bedrooms, String houseType) {
         return yieldStatsService.getByFullPostCode(apiKey, postcode, bedrooms, houseType)
-                .onFailure()
-                    .retry()
-                    .atMost(3)
-                .onFailure()
-                    .recoverWithUni(o -> Uni.createFrom().failure(new NotFoundException()));
+                .onItemOrFailure()
+                .transformToUni((value, error) -> {
+                    if (error == null) {
+                        log.infof("Successfully fetched yield stats for postcode: %s", postcode);
+                        return Uni.createFrom().item(value);
+                    } else {
+                        log.warnf("Unsuccessfully fetched yield for postcode: %s. Trying to recover using its outcode.", postcode);
+                        return postCodeService.lookupPostcode(postcode)
+                                .onFailure()
+                                    .invoke(() -> log.errorf("Error while looking up for postcode: %s", postcode))
+                                    .onFailure()
+                                    .recoverWithUni(() -> Uni.createFrom().failure(new NotFoundException()))
+                                .onItem()
+                                    .transformToUni(postCodeLookUp -> getYieldStatsByOutcode(postCodeLookUp.result.outcode));
+                    }
+                });
     }
 
 
@@ -93,19 +104,18 @@ public class YieldResource {
         return postCodeValidator.isValidOutCode(outcode)
                 .onItemOrFailure()
                 .transformToUni((value, error) -> {
-                    if(error == null){
+                    if (error == null) {
                         log.infof("Invoking outcode stats service for outcode: %s", outcode);
-                      return outCodeStatsService.getStats(outcode)
-                        .onFailure()
-                            .retry()
-                            .atMost(3)
-                        .map(OutcodeStatsMapper.INSTANCE::outcodeStatsToYieldStats)
-                            .onFailure()
-                            .recoverWithUni(o -> Uni.createFrom().failure(new NotFoundException()));
-                    }
-                    else{
+                        return outCodeStatsService.getStats(outcode)
+                                .onFailure()
+                                .retry()
+                                .atMost(3)
+                                .map(OutcodeStatsMapper.INSTANCE::outcodeStatsToYieldStats)
+                                .onFailure()
+                                .recoverWithUni(o -> Uni.createFrom().failure(new NotFoundException()));
+                    } else {
                         log.warnf("Outcode %s is deemed invalid", outcode);
-                        return  Uni.createFrom().failure(new NotFoundException());
+                        return Uni.createFrom().failure(new NotFoundException());
                     }
                 });
     }

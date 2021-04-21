@@ -42,7 +42,7 @@ paths:
             enum: [ flat,terraced_house,semi-detached_house,detached_house ]
       responses:
         '200':
-          description: 'Service response'
+          description: 'Successful response'
           content:
             application/json:
               examples:
@@ -60,6 +60,11 @@ paths:
                         radius: '0.17'
                         gross_yield: 4.2%
                     process_time: '2.64'
+        '400':
+          description: 'Unsuccessful response'
+          content:
+            application/json:
+              examples:
                 invalid_postcode:
                   value:
                     status: error

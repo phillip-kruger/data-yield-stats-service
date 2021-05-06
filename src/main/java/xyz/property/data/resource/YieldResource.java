@@ -28,15 +28,14 @@ public class YieldResource {
 
     @Inject
     @RestClient
+    PostCodeService postCodeService;
+    @RestClient
     YieldStatsService yieldStatsService;
 
     @Inject
     @RestClient
     OutCodeStatsService outCodeStatsService;
 
-    @Inject
-    @RestClient
-    PostCodeService postCodeService;
 
     @Inject
     PostCodeValidator postCodeValidator;

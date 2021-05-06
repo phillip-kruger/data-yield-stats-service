@@ -4,8 +4,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "name" . }}
+{{- if .Values.deployment.annotations }}
   annotations:
-    sidecar.jaegertracing.io/inject: "true"
+{{ toYaml .Values.deployment.annotations | indent 4 }}
+{{- end }}
   labels:
     draft: {{ default "draft-app" .Values.draft }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
@@ -22,9 +24,9 @@ spec:
       labels:
         draft: {{ default "draft-app" .Values.draft }}
         app: {{ template "fullname" . }}
-{{- if .Values.podAnnotations }}
+{{- if .Values.pod.annotations }}
       annotations:
-{{ toYaml .Values.podAnnotations | indent 8 }}
+{{ toYaml .Values.pod.annotations | indent 8 }}
 {{- end }}
     spec:
 {{- if .Values.serviceAccount.enabled }}

@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 
 @Path("/yield")
@@ -72,7 +73,7 @@ public class YieldResource {
                         log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", postcode);
                         return getYieldStatsByOutcode(postcode);
                     }
-                });
+                }).onItem().invoke(yieldStats -> yieldStats.effective_date = new Date().getTime());
     }
 
     private Uni<YieldStats> getYieldStatsByPostCode(String postcode, Integer bedrooms, String houseType) {

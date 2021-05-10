@@ -9,6 +9,7 @@ public class YieldStats {
     public String code;
     public String message;
     public String process_time;
+    public Long effective_date;
 
     public String postcode;
     public String postcode_type;

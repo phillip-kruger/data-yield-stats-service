@@ -24,16 +24,16 @@ public class YieldStats {
     public Data data;
 
     public static class LongLet{
-        @ProtoField(1)
+        @ProtoField(number = 1)
         public Integer points_analysed;
-        @ProtoField(2)
+        @ProtoField(number = 2)
         public String radius;
-        @ProtoField(3)
+        @ProtoField(number = 3)
         public String gross_yield;
     }
 
     public static class Data{
-        @ProtoField(1)
+        @ProtoField(number = 1)
         public LongLet long_let;
     }
 

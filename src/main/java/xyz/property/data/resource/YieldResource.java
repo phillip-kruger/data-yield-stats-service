@@ -1,15 +1,14 @@
 package xyz.property.data.resource;
 
-import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 import org.jboss.logging.Logger;
-import xyz.property.data.annotations.ValidHouseType;
+import xyz.property.cache.CacheKey;
+import xyz.property.cache.Cached;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
@@ -53,14 +52,12 @@ public class YieldResource {
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
-    public Uni<YieldStats> getYieldStats(@QueryParam("postcode")
-                                         @Length(min = 2, max = 8, message = "A valid postcode must contain between 2 and 8 alphanumeric characters.")
-                                                 String postcode,
-                                         @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
-                                         @Nullable
+    @Cached(cacheName = "yield-stats")
+    public Uni<YieldStats> getYieldStats(
+                                         @CacheKey("postcode")
+                                         @QueryParam("postcode")
+                                         @Length(min = 2, max = 8, message = "A valid postcode must contain between 2 and 8 alphanumeric characters.") String postcode,
                                          @QueryParam("bedrooms") Integer bedrooms,
-                                         @ValidHouseType
-                                         @Nullable
                                          @QueryParam("type") String houseType) {
 
         log.infof("Getting yield stats for postcode: %s ", postcode);

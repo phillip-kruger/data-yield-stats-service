@@ -1,8 +1,6 @@
 package xyz.property.data.service;
 
 
-import io.quarkus.cache.CacheKey;
-import io.quarkus.cache.CacheResult;
 import io.smallrye.mutiny.Uni;
 import jdk.jfr.Description;
 import lombok.NonNull;
@@ -24,10 +22,9 @@ public interface YieldStatsService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @CacheResult(cacheName = "yield-data")
     Uni<YieldStats> getByFullPostCode(@NonNull @QueryParam("key") String key,
-                                      @CacheKey @NonNull @QueryParam("postcode") String postcode,
-                                      @CacheKey @QueryParam("bedrooms") Integer bedrooms,
-                                      @CacheKey @QueryParam("type") String houseType);
+                                      @NonNull @QueryParam("postcode") String postcode,
+                                      @QueryParam("bedrooms") Integer bedrooms,
+                                      @QueryParam("type") String houseType);
 
 }

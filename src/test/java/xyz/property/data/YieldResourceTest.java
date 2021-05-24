@@ -65,7 +65,7 @@ public class YieldResourceTest {
                 .extract()
                 .body().as(YieldStats.class);
 
-        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":0,\"data\":{\"long_let\":{\"points_analysed\":0,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
+        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"effective_date\":1621869046191,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":null,\"type\":null,\"data\":{\"long_let\":{\"points_analysed\":null,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
         assertThat(yieldStats).usingRecursiveComparison().ignoringFields("effective_date").isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
 
     }
@@ -95,7 +95,7 @@ public class YieldResourceTest {
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().as(YieldStats.class);
-        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":0,\"data\":{\"long_let\":{\"points_analysed\":0,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
+        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"effective_date\":1621869046191,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":null,\"type\":null,\"data\":{\"long_let\":{\"points_analysed\":null,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
         assertThat(yieldStats).usingRecursiveComparison().ignoringFields("effective_date").isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
     }
 
@@ -121,7 +121,7 @@ public class YieldResourceTest {
                 .statusCode(HttpStatus.SC_OK)
                 .extract().as(YieldStats.class);
 
-        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":0,\"data\":{\"long_let\":{\"points_analysed\":0,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
+        String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"effective_date\":1621869046191,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":null,\"type\":null,\"data\":{\"long_let\":{\"points_analysed\":null,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
         assertThat(yieldStats).usingRecursiveComparison().ignoringFields("effective_date").isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
     }
 

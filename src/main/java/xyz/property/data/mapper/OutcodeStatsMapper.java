@@ -20,6 +20,8 @@ public interface OutcodeStatsMapper {
     @AfterMapping
     default void fillData(OutCodeStats outCodeStats, @MappingTarget YieldStats yieldStats) {
         yieldStats.postcode_type= "outcode";
+        yieldStats.data = new YieldStats.Data();
+        yieldStats.data.long_let = new YieldStats.LongLet();
         yieldStats.data.long_let.gross_yield = Double.toString(outCodeStats.avgYield);
         log.infof("Successfully fetched stats for outcode: %s", outCodeStats.outcode);
     }

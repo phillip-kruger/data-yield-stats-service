@@ -79,6 +79,7 @@ readinessProbe:
 ingress:
   annotations:
 #      kubernetes.io/ingress.class: nginx
+  enabled: false
 
 serviceAccount:
   enabled: true

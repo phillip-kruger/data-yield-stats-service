@@ -1,4 +1,4 @@
-{{- if and (.Values.jxRequirements.ingress.domain) (not .Values.knativeDeploy) }}
+{{- if .Values.ingress.enabled }}
 apiVersion: {{ .Values.jxRequirements.ingress.apiVersion }}
 kind: Ingress
 metadata:

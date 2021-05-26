@@ -25,7 +25,7 @@ public class PostCodeServiceHealthCheck implements HealthCheck {
     public HealthCheckResponse call() {
         HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Upstream health check");
 
-        int postcodeServiceStatus = postCodeService.validateFullPostcode("NG5 4AU")
+        int postcodeServiceStatus = postCodeService.validateFullPostcode("NG54AU")
                 .await()
                 .atMost(Duration.ofMillis(2000))
                 .status;

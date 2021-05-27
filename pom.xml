@@ -20,7 +20,7 @@
     <assertj-core.version>3.19.0</assertj-core.version>
     <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     <lombok.version>1.18.20</lombok.version>
-    <remote-cache.version>0.2.3</remote-cache.version>
+    <remote-cache.version>0.2.4</remote-cache.version>
   </properties>
   <repositories>
     <repository>

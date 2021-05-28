@@ -28,10 +28,6 @@ public interface PostCodeService {
 
 
     @GET
-    @Path("postcodes/{postcode}")
-    @Produces(MediaType.APPLICATION_JSON)
-    PostCodeLookUp lookupPostcode2(@PathParam("postcode") String postcode);
-    @GET
     @Path("/{outcode}/autocomplete")
     @Produces(MediaType.APPLICATION_JSON)
     Uni<OutCodeValidation> validateOutCode(@PathParam("outcode") String outcode);

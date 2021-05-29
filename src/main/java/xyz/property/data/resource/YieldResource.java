@@ -57,12 +57,14 @@ public class YieldResource {
     @Timeout(value = 5, unit = ChronoUnit.SECONDS)
     @Cached(cacheName = "yield-stats")
     public Uni<YieldStats> getYieldStats(
-            @CacheKey("postcode")
+            @CacheKey
             @QueryParam("postcode")
             @Length(min = 2, max = 8, message = "A valid postcode must contain between 2 and 8 alphanumeric characters.") String postcode,
+            @CacheKey
             @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
             @Nullable
             @QueryParam("bedrooms") Integer bedrooms,
+            @CacheKey
             @ValidHouseType
             @Nullable
             @QueryParam("type") String houseType) {

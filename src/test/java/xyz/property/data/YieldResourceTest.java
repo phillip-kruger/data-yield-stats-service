@@ -102,12 +102,12 @@ public class YieldResourceTest {
     @Test
     void shouldFailWithInvalidOutcode() throws JsonProcessingException {
         given()
-                .queryParam("postcode", "W")
+                .queryParam("postcode", "WW")
                 .when()
                 .get("/yield")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.SC_BAD_REQUEST);
+                .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test

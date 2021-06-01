@@ -2,16 +2,16 @@ package xyz.property.data.resource;
 
 import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
+import lombok.NonNull;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
-import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.jboss.logging.Logger;
 import xyz.property.cache.CacheKey;
 import xyz.property.cache.Cached;
 import xyz.property.data.annotations.ValidHouseType;
+import xyz.property.data.converters.PostCodeConverter;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
@@ -20,9 +20,9 @@ import xyz.property.data.service.YieldStatsService;
 import xyz.property.data.validator.PostCodeValidator;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 
@@ -32,6 +32,8 @@ public class YieldResource {
     @Inject
     @RestClient
     PostCodeService postCodeService;
+
+    @Inject
     @RestClient
     YieldStatsService yieldStatsService;
 
@@ -39,13 +41,14 @@ public class YieldResource {
     @RestClient
     OutCodeStatsService outCodeStatsService;
 
-
     @Inject
     PostCodeValidator postCodeValidator;
 
+    @Inject
+    PostCodeConverter postCodeConverter;
+
     @ConfigProperty(name = "provider.propertydata.api.key")
     String apiKey;
-
 
     @Inject
     Logger log;
@@ -54,12 +57,11 @@ public class YieldResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @CircuitBreaker(skipOn = IllegalArgumentException.class)
-    @Timeout(value = 5, unit = ChronoUnit.SECONDS)
     @Cached(cacheName = "yield-stats")
     public Uni<YieldStats> getYieldStats(
+            @NonNull
             @CacheKey
-            @QueryParam("postcode")
-            @Length(min = 2, max = 8, message = "A valid postcode must contain between 2 and 8 alphanumeric characters.") String postcode,
+            @QueryParam("postcode") String postcode,
             @CacheKey
             @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
             @Nullable
@@ -69,15 +71,16 @@ public class YieldResource {
             @Nullable
             @QueryParam("type") String houseType) {
 
+
         log.infof("Getting yield stats for postcode: %s ", postcode);
 
         return postCodeValidator.isValidFullPostCode(postcode)
                 .onItemOrFailure().transformToUni((value, error) -> {
                     if (error == null) {
-                        return getYieldStatsByPostCode(postcode, bedrooms, houseType);
+                        return getYieldStatsByPostCode(postCodeConverter.formatPostCode(postcode), bedrooms, houseType);
                     } else {
                         log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", postcode);
-                        return getYieldStatsByOutcode(postcode);
+                        return getYieldStatsByOutcode(postCodeConverter.formatPostCode(postcode));
                     }
                 }).onItem().invoke(yieldStats -> yieldStats.effective_date = new Date().getTime());
     }

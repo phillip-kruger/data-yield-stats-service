@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class PostCodeConverter {
 
     static Pattern postCodePattern;
-    public static final String POST_CODE_PATTERN = "(?i)^([A-Z]{1,2}\\d[A-Z\\d]?) ?(\\d[A-Z]{2})$";
+    public static final String POST_CODE_PATTERN = "(?i)^([A-Z]{1,2}\\d[A-Z\\d]?)\\s?(\\d[A-Z]{2})?$";
 
     @PostConstruct
     void setMatcher() {

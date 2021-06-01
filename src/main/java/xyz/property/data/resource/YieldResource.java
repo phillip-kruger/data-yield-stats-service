@@ -27,7 +27,6 @@ import java.util.Date;
 
 
 @Path("/yield")
-@Authenticated
 public class YieldResource {
 
     @Inject

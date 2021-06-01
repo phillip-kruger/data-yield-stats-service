@@ -1,5 +1,6 @@
 package xyz.property.data.resource;
 
+import io.quarkus.security.Authenticated;
 import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
@@ -20,13 +21,13 @@ import xyz.property.data.service.YieldStatsService;
 import xyz.property.data.validator.PostCodeValidator;
 
 import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 
 
 @Path("/yield")
+@Authenticated
 public class YieldResource {
 
     @Inject

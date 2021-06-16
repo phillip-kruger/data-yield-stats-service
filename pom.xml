@@ -17,7 +17,7 @@
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.13.7.Final</quarkus.platform.version>
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
-    <assertj-core.version>3.20.0</assertj-core.version>
+    <assertj-core.version>3.20.1</assertj-core.version>
     <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     <lombok.version>1.18.20</lombok.version>
     <remote-cache.version>0.3.3</remote-cache.version>

@@ -1,11 +1,9 @@
 package xyz.property.data.resource;
 
-import io.quarkus.security.Authenticated;
 import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.hibernate.validator.constraints.Range;
 import org.jboss.logging.Logger;
@@ -56,7 +54,6 @@ public class YieldResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @CircuitBreaker(skipOn = IllegalArgumentException.class)
     @Cached(cacheName = "yield-stats")
     public Uni<YieldStats> getYieldStats(
             @NonNull

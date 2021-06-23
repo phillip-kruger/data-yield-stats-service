@@ -1,17 +1,14 @@
 package xyz.property.data.healthcheck;
 
 
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
-import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import xyz.property.data.service.OutCodeStatsService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Liveness
+@Readiness
 @Singleton
 public class OutcodeServiceHealthCheck implements HealthCheck {
 

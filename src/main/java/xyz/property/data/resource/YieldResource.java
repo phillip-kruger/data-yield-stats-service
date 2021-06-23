@@ -1,24 +1,21 @@
 package xyz.property.data.resource;
 
-import io.smallrye.common.constraint.Nullable;
 import io.smallrye.mutiny.Uni;
-import lombok.NonNull;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.hibernate.validator.constraints.Range;
 import org.jboss.logging.Logger;
 import xyz.property.cache.CacheKey;
 import xyz.property.cache.Cached;
-import xyz.property.data.annotations.ValidHouseType;
 import xyz.property.data.converters.PostCodeConverter;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
 import xyz.property.data.service.PostCodeService;
 import xyz.property.data.service.YieldStatsService;
-import xyz.property.data.validator.PostCodeValidator;
+import xyz.property.data.validators.PostCodeValidator;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
@@ -55,29 +52,17 @@ public class YieldResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Cached(cacheName = "yield-stats")
-    public Uni<YieldStats> getYieldStats(
-            @NonNull
-            @CacheKey
-            @QueryParam("postcode") String postcode,
-            @CacheKey
-            @Range(min = 1, max = 5, message = "Number of bedrooms must be within 1 and 5.")
-            @Nullable
-            @QueryParam("bedrooms") Integer bedrooms,
-            @CacheKey
-            @ValidHouseType
-            @Nullable
-            @QueryParam("type") String houseType) {
+    public Uni<YieldStats> getYieldStats(@CacheKey @BeanParam YieldSearchParameters searchParams) {
 
+        log.infof("Getting yield stats for postcode: %s ", searchParams.getPostcode());
 
-        log.infof("Getting yield stats for postcode: %s ", postcode);
-
-        return postCodeValidator.isValidFullPostCode(postcode)
+        return postCodeValidator.isValidFullPostCode(searchParams.getPostcode())
                 .onItemOrFailure().transformToUni((value, error) -> {
                     if (error == null) {
-                        return getYieldStatsByPostCode(postCodeConverter.formatPostCode(postcode), bedrooms, houseType);
+                        return getYieldStatsByPostCode(postCodeConverter.formatPostCode(searchParams.getPostcode()), searchParams.getBedrooms(), searchParams.getHouseType());
                     } else {
-                        log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", postcode);
-                        return getYieldStatsByOutcode(postCodeConverter.formatPostCode(postcode));
+                        log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", searchParams.getPostcode());
+                        return getYieldStatsByOutcode(postCodeConverter.formatPostCode(searchParams.getPostcode()));
                     }
                 }).onItem().invoke(yieldStats -> yieldStats.effective_date = new Date().getTime());
     }

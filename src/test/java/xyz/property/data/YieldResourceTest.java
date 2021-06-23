@@ -30,30 +30,6 @@ public class YieldResourceTest {
     }
 
     @Test
-    void shouldGetInvalidRequestWith6Bedrooms() {
-        given()
-                .queryParam("postcode", "B11BB")
-                .queryParam("bedrooms", 6)
-                .when()
-                .get("/yield")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.SC_BAD_REQUEST);
-    }
-
-    @Test
-    void shouldGetInvalidRequestWithUnknownHouseType() {
-        given()
-                .queryParam("postcode", "B11BB")
-                .queryParam("type", "Villa")
-                .when()
-                .get("/yield")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.SC_BAD_REQUEST);
-    }
-
-    @Test
     void shouldFallBackToOutCodeStatsWhenInsufficientData() throws JsonProcessingException {
         YieldStats yieldStats = given()
                 .queryParam("postcode", "W149AA")

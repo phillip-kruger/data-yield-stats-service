@@ -1,4 +1,4 @@
-package xyz.property.data.validator;
+package xyz.property.data.validators;
 
 import io.smallrye.mutiny.Uni;
 import lombok.NonNull;
@@ -6,11 +6,12 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import xyz.property.data.service.PostCodeService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.NotFoundException;
 
-@Singleton
+@ApplicationScoped
 public class PostCodeValidator {
 
     @Inject
@@ -26,10 +27,8 @@ public class PostCodeValidator {
                 .onItem()
                 .transform(postCodeValidation -> {
                     if (postCodeValidation.result) {
-                        log.infof("Postcode %s is valid", postcode);
                         return null;
                     } else {
-                        log.warnf("Postcode %s is invalid", postcode);
                         throw new NotFoundException();
                     }
                 });
@@ -46,10 +45,8 @@ public class PostCodeValidator {
                 .onItem()
                 .transform(outCodeValidation -> {
                     if (outCodeValidation.result != null) {
-                        log.infof("Outcode %s is valid", outcode);
                         return null;
                     } else {
-                        log.warnf("Outcode %s is invalid", outcode);
                         throw new NotFoundException();
                     }
                 });

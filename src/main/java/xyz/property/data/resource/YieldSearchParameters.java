@@ -3,8 +3,6 @@ package xyz.property.data.resource;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.hibernate.validator.constraints.Range;
-import xyz.property.data.converters.PostCodeConverter;
-
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;
 
@@ -12,7 +10,7 @@ import javax.ws.rs.QueryParam;
 public class YieldSearchParameters {
 
     @Parameter(required = true)
-    @Pattern(regexp = PostCodeConverter.POST_CODE_PATTERN)
+    @Pattern(regexp = "(?i)^([A-Z]{1,2}\\d[A-Z\\d]?)\\s?(\\d[A-Z]{2})?$" )
     @QueryParam("postcode")
     String postcode;
 

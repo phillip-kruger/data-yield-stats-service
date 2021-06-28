@@ -6,7 +6,6 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import xyz.property.cache.CacheKey;
 import xyz.property.cache.Cached;
-import xyz.property.data.converters.PostCodeConverter;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
@@ -15,7 +14,6 @@ import xyz.property.data.service.YieldStatsService;
 import xyz.property.data.validators.PostCodeValidator;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
@@ -39,9 +37,6 @@ public class YieldResource {
     @Inject
     PostCodeValidator postCodeValidator;
 
-    @Inject
-    PostCodeConverter postCodeConverter;
-
     @ConfigProperty(name = "provider.propertydata.api.key")
     String apiKey;
 
@@ -59,10 +54,10 @@ public class YieldResource {
         return postCodeValidator.isValidFullPostCode(searchParams.getPostcode())
                 .onItemOrFailure().transformToUni((value, error) -> {
                     if (error == null) {
-                        return getYieldStatsByPostCode(postCodeConverter.formatPostCode(searchParams.getPostcode()), searchParams.getBedrooms(), searchParams.getHouseType());
+                        return getYieldStatsByPostCode(searchParams.getPostcode(), searchParams.getBedrooms(), searchParams.getHouseType());
                     } else {
                         log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", searchParams.getPostcode());
-                        return getYieldStatsByOutcode(postCodeConverter.formatPostCode(searchParams.getPostcode()));
+                        return getYieldStatsByOutcode(searchParams.getPostcode());
                     }
                 }).onItem().invoke(yieldStats -> yieldStats.effective_date = new Date().getTime());
     }

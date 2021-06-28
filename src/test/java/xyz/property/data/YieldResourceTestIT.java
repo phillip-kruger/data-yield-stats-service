@@ -2,6 +2,7 @@ package xyz.property.data;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,8 @@ import javax.inject.Inject;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@QuarkusTest
-public class YieldResourceTest {
+@QuarkusIntegrationTest
+public class YieldResourceTestIT {
 
     @Inject
     ObjectMapper mapper;
@@ -43,7 +44,6 @@ public class YieldResourceTest {
 
         String expectedStats = "{\"status\":null,\"code\":null,\"message\":null,\"process_time\":null,\"effective_date\":1621869046191,\"postcode\":\"W1\",\"postcode_type\":\"outcode\",\"url\":null,\"bedrooms\":null,\"type\":null,\"data\":{\"long_let\":{\"points_analysed\":null,\"radius\":null,\"gross_yield\":\"4.6\"}}}";
         assertThat(yieldStats).usingRecursiveComparison().ignoringFields("effective_date").isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
-
     }
 
 
@@ -59,6 +59,17 @@ public class YieldResourceTest {
                 .extract().as(YieldStats.class);
         String expectedStats = "{\"status\":\"success\",\"code\":null,\"type\":\"flat\",\"message\":null,\"process_time\":\"2.64\",\"postcode\":\"B1 1BB\",\"postcode_type\":\"full\",\"url\":\"https://propertydata.co.uk/draw?input=B1+1BB\",\"bedrooms\":2,\"data\":{\"long_let\":{\"points_analysed\":40,\"radius\":\"0.17\",\"gross_yield\":\"4.2%\"}}}";
         assertThat(yieldStats).usingRecursiveComparison().ignoringFields("effective_date").isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
+    }
+
+    @Test
+    void shouldGetYieldWithValidPostcodeContainingSpace() throws JsonProcessingException {
+        given()
+                .queryParam("postcode", "B1 1BB")
+                .when()
+                .get("/yield")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test

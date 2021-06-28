@@ -18,9 +18,9 @@ paths:
             invalid_postcode:
               value: "W1"
             insufficient_data:
-              value: "W149AA"
+              value: "W14 9AA"
             success:
-              value: "B11BB"
+              value: "B1 1BB"
         - name: key
           description: 'PropertyData Api Key'
           in: query

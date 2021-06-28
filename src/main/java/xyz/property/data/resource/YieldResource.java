@@ -7,6 +7,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import xyz.property.cache.CacheKey;
 import xyz.property.cache.Cached;
+import xyz.property.data.formatters.postcode.PostCodeFormatter;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
@@ -45,21 +46,25 @@ public class YieldResource {
     @Inject
     Logger log;
 
+    @Inject
+    PostCodeFormatter postCodeFormatter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Cached(cacheName = "yield-stats")
     public Uni<YieldStats> getYieldStats(@CacheKey @BeanParam YieldSearchParameters searchParams) {
 
-        log.infof("Getting yield stats for postcode: %s ", searchParams.getPostcode());
+        String postcode =  postCodeFormatter.format(searchParams.getPostcode());
 
-        return postCodeValidator.isValidFullPostCode(searchParams.getPostcode())
+        log.infof("Getting yield stats for postcode: %s ", postcode);
+
+        return postCodeValidator.isValidFullPostCode(postcode)
                 .onItemOrFailure().transformToUni((value, error) -> {
                     if (error == null) {
-                        return getYieldStatsByPostCode(searchParams.getPostcode(), searchParams.getBedrooms(), searchParams.getHouseType());
+                        return getYieldStatsByPostCode(postcode, searchParams.getBedrooms(), searchParams.getHouseType());
                     } else {
-                        log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", searchParams.getPostcode());
-                        return getYieldStatsByOutcode(searchParams.getPostcode());
+                        log.warnf("Postcode %s is deemed invalid. Trying to recover using outcode.", postcode);
+                        return getYieldStatsByOutcode(postcode);
                     }
                 }).onItem().invoke(yieldStats -> yieldStats.effective_date = new Date().getTime());
     }

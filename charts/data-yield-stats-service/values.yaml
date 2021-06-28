@@ -63,7 +63,7 @@ resources:
     memory: 128Mi
 probePath: "/q/health"
 livenessProbe:
-  initialDelaySeconds: 60
+  initialDelaySeconds:
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
@@ -71,7 +71,7 @@ livenessProbe:
   probePath: "/q/health/live"
 readinessProbe:
   failureThreshold: 1
-  periodSeconds: 10
+  periodSeconds: 60
   successThreshold: 1
   timeoutSeconds: 1
   # Optional distinct readiness probe path, if empty the probePath is used

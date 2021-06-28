@@ -31,7 +31,4 @@ public interface PostCodeService {
     @Path("/{outcode}/autocomplete")
     @Produces(MediaType.APPLICATION_JSON)
     Uni<OutCodeValidation> validateOutCode(@PathParam("outcode") String outcode);
-
-
-
 }

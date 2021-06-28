@@ -2,7 +2,6 @@ package xyz.property.data;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
@@ -13,10 +12,11 @@ import javax.inject.Inject;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@QuarkusIntegrationTest
-public class YieldResourceTestIT {
+@QuarkusTest
+public class YieldResourceTest {
 
-    final ObjectMapper mapper = new ObjectMapper();
+    @Inject
+    ObjectMapper mapper;
 
     @Test
     void shouldGetNotFoundWithInvalidPostcode() {

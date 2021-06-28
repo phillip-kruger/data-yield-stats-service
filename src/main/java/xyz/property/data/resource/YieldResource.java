@@ -51,8 +51,7 @@ public class YieldResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Cached(cacheName = "yield-stats")
-    public Uni<YieldStats> getYieldStats(@CacheKey @BeanParam YieldSearchParameters searchParams) {
+    public Uni<YieldStats> getYieldStats(@BeanParam YieldSearchParameters searchParams) {
 
         String postcode =  postCodeFormatter.format(searchParams.getPostcode());
 

@@ -1,8 +1,9 @@
 package xyz.property.data.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Data;
 
-@Data
+@RegisterForReflection
 public class PostCodeValidation {
     public int status;
     public boolean result;

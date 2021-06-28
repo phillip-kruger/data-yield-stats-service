@@ -1,13 +1,15 @@
 package xyz.property.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.infinispan.protostream.annotations.ProtoField;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Setter
-@EqualsAndHashCode
+@Data
+@RegisterForReflection
 public class YieldStats {
 
     public String status;

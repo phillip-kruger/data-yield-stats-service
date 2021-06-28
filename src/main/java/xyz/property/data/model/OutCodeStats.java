@@ -1,5 +1,10 @@
 package xyz.property.data.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Data;
+
+@Data
+@RegisterForReflection
 public class OutCodeStats {
     public double avgPrice;
     public int avgPricePsf;

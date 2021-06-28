@@ -1,8 +1,12 @@
 package xyz.property.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@RegisterForReflection
 public class PostCodeLookUp {
     public int status;
     public Result result;

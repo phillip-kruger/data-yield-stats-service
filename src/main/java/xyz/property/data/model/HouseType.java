@@ -1,5 +1,8 @@
 package xyz.property.data.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public enum HouseType {
     flat("flat"),
     terraced("terraced_house"),

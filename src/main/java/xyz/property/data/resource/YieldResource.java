@@ -1,5 +1,6 @@
 package xyz.property.data.resource;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Date;
 
 
+@RegisterForReflection
 @Path("/yield")
 public class YieldResource {
 

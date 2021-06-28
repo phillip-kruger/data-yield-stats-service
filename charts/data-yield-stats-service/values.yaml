@@ -71,7 +71,7 @@ livenessProbe:
   probePath: "/q/health/live"
 readinessProbe:
   failureThreshold: 1
-  periodSeconds: 60
+  periodSeconds: 3600
   successThreshold: 1
   timeoutSeconds: 1
   # Optional distinct readiness probe path, if empty the probePath is used

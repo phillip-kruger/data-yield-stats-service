@@ -16,8 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusIntegrationTest
 public class YieldResourceTestIT {
 
-    @Inject
-    ObjectMapper mapper;
+    final ObjectMapper mapper = new ObjectMapper();
 
     @Test
     void shouldGetNotFoundWithInvalidPostcode() {

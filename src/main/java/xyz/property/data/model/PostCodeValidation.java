@@ -1,8 +1,8 @@
 package xyz.property.data.model;
 
-import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@NoArgsConstructor
 public class PostCodeValidation {
     public int status;
     public boolean result;

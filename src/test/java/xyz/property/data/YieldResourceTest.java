@@ -18,16 +18,7 @@ public class YieldResourceTest {
     @Inject
     ObjectMapper mapper;
 
-    @Test
-    void shouldGetNotFoundWithInvalidPostcode() {
-        given()
-                .queryParam("postcode", "WW")
-                .when()
-                .get("/yield")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.SC_NOT_FOUND);
-    }
+
 
     @Test
     void shouldFallBackToOutCodeStatsWhenInsufficientData() throws JsonProcessingException {
@@ -85,16 +76,6 @@ public class YieldResourceTest {
         assertThat(yieldStats).usingRecursiveComparison().ignoringFields("effective_date").isEqualTo(mapper.readValue(expectedStats, YieldStats.class));
     }
 
-    @Test
-    void shouldFailWithInvalidOutcode() throws JsonProcessingException {
-        given()
-                .queryParam("postcode", "WW")
-                .when()
-                .get("/yield")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.SC_NOT_FOUND);
-    }
 
     @Test
     void shouldFallbackToOutcodeStatsWithDistrictPostCode() throws JsonProcessingException {

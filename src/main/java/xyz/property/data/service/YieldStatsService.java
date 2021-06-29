@@ -26,5 +26,4 @@ public interface YieldStatsService {
                                       @NonNull @QueryParam("postcode") String postcode,
                                       @QueryParam("bedrooms") Integer bedrooms,
                                       @QueryParam("type") String houseType);
-
 }

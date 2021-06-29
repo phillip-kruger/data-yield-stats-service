@@ -49,7 +49,7 @@ public class YieldResource {
                 .onItem()
                     .invoke(() -> log.infof("Successfully fetched stats for postcode:%s", searchParams.getPostcode()))
                 .onFailure()
-                    .recoverWithUni(getYieldStatsByOutcode(searchParams.getPostcode()))
+                    .recoverWithUni(()-> getYieldStatsByOutcode(searchParams.getPostcode()))
                 .onItem()
                     .invoke(yieldStats -> yieldStats.effective_date = new Date().getTime())
                 .onFailure()

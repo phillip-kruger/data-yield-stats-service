@@ -16,6 +16,8 @@ env:
 
 # enable this flag to use knative serve to deploy the app
 knativeDeploy: false
+knative:
+  minScale: "1"
 
 # HorizontalPodAutoscaler
 hpa:

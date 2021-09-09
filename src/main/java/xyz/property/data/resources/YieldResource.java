@@ -35,7 +35,7 @@ public class YieldResource {
     Logger log;
 
 
-    public Uni<YieldStats> getStats(YieldSearchCriteria searchParams) {
+    public Uni<YieldStats> getStats(SearchCriteria searchParams) {
 
         log.infof("Getting yield stats for postcode: %s ", searchParams.getPostcode());
 

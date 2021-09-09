@@ -7,7 +7,7 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
 import xyz.property.data.resources.YieldResource;
-import xyz.property.data.resources.YieldSearchCriteria;
+import xyz.property.data.resources.SearchCriteria;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -19,16 +19,13 @@ public class YieldServiceHealthCheck implements AsyncHealthCheck {
     @Inject
     YieldResource yieldResource;
 
-    @Inject
-    YieldSearchCriteria yieldSearchParameters;
-
 
     @Override
     public Uni<HealthCheckResponse> call() {
         HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Yield service health check");
 
-        yieldSearchParameters.setPostcode("B11BB");
-        return yieldResource.getStats(yieldSearchParameters)
+        SearchCriteria searchCriteria = new SearchCriteria("B11BB", null, null);
+        return yieldResource.getStats(searchCriteria)
                 .onItem().transform(postCodeValidation -> responseBuilder
                         .up()
                         .withData("Yield service:", "OK").build())

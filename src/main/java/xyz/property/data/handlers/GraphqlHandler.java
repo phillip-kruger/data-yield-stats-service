@@ -8,7 +8,7 @@ import xyz.property.cache.CacheKey;
 import xyz.property.cache.Cached;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.resources.YieldResource;
-import xyz.property.data.resources.YieldSearchCriteria;
+import xyz.property.data.resources.SearchCriteria;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -23,7 +23,7 @@ public class GraphqlHandler {
     @Query
     @Description("Fetch yield stats for the give full postcode")
     @Cached(cacheName = "yield-data")
-    public Uni<YieldStats> getYield(@CacheKey YieldSearchCriteria searchCriteria) {
+    public Uni<YieldStats> getYield(@CacheKey SearchCriteria searchCriteria) {
         return yieldResource.getStats(searchCriteria);
     }
 }

@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;
 
 @Value
-public class YieldSearchCriteria {
+public class SearchCriteria {
 
     @Parameter(required = true)
     @Pattern(regexp = "(?i)^([A-Z]{1,2}\\d[A-Z\\d]?)\\s?(\\d[A-Z]{2})?$" )

@@ -1,13 +1,14 @@
-package xyz.property.data.resource;
+package xyz.property.data.resources;
 
-import lombok.Data;
+import lombok.Value;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;
 
-@Data
-public class YieldSearchParameters {
+@Value
+public class YieldSearchCriteria {
 
     @Parameter(required = true)
     @Pattern(regexp = "(?i)^([A-Z]{1,2}\\d[A-Z\\d]?)\\s?(\\d[A-Z]{2})?$" )

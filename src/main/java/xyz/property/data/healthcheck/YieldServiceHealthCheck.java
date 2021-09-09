@@ -6,10 +6,8 @@ import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import xyz.property.data.resource.YieldResource;
-import xyz.property.data.resource.YieldSearchParameters;
-import xyz.property.data.service.OutCodeStatsService;
+import xyz.property.data.resources.YieldResource;
+import xyz.property.data.resources.YieldSearchCriteria;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,7 +20,7 @@ public class YieldServiceHealthCheck implements AsyncHealthCheck {
     YieldResource yieldResource;
 
     @Inject
-    YieldSearchParameters yieldSearchParameters;
+    YieldSearchCriteria yieldSearchParameters;
 
 
     @Override
@@ -30,7 +28,7 @@ public class YieldServiceHealthCheck implements AsyncHealthCheck {
         HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Yield service health check");
 
         yieldSearchParameters.setPostcode("B11BB");
-        return yieldResource.getYieldStats(yieldSearchParameters)
+        return yieldResource.getStats(yieldSearchParameters)
                 .onItem().transform(postCodeValidation -> responseBuilder
                         .up()
                         .withData("Yield service:", "OK").build())

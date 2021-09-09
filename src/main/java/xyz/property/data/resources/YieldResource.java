@@ -1,27 +1,24 @@
-package xyz.property.data.resource;
+package xyz.property.data.resources;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
-import xyz.property.cache.CacheKey;
-import xyz.property.cache.Cached;
 import xyz.property.data.mapper.OutcodeStatsMapper;
 import xyz.property.data.model.YieldStats;
 import xyz.property.data.service.OutCodeStatsService;
 import xyz.property.data.service.YieldStatsService;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.NotFoundException;
 import java.util.Date;
 
 
 @RegisterForReflection
-@Path("/yield")
+@RequestScoped
 public class YieldResource {
-
 
     @Inject
     @RestClient
@@ -38,10 +35,7 @@ public class YieldResource {
     Logger log;
 
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Cached(cacheName = "yield-stats")
-    public Uni<YieldStats> getYieldStats(@CacheKey @BeanParam YieldSearchParameters searchParams) {
+    public Uni<YieldStats> getStats(YieldSearchCriteria searchParams) {
 
         log.infof("Getting yield stats for postcode: %s ", searchParams.getPostcode());
 
